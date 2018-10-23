@@ -15,7 +15,8 @@ nTrials = 576; % 560 trials per condition (this is a little less than the mean n
 % generate a weight matrix (30 electrodes x 8 channels)
 nElectrodes = 30; % REVIEW
 nChans = 8;
-w = normrnd(0,1,nChans,nElectrodes);
+% w = normrnd(0,1,nChans,nElectrodes);
+w = rand(nChans,nElectrodes); 
 
 % simulate SS1 data
 [SS1_dat,SS1_pos1,SS1_pos2] = simulateDat(1,nTrials,SS1_amp,e_noise,w);
