@@ -23,7 +23,7 @@ end
 % specify basis set for generated predicted channel responses
 nBins = 360;
 nChans = 8;
-em.sinPower = 13;
+em.sinPower = 25;
 em.x = linspace(0, 2*pi-2*pi/nBins, nBins);
 em.cCenters = linspace(0, 2*pi-2*pi/nChans, nChans);
 em.cCenters = rad2deg(em.cCenters);
