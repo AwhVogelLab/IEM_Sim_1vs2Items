@@ -1,4 +1,4 @@
-function [p mn_diff mn_SS1 mn_SS2] = simulateSample(nSubs,SS1_amp,SS2_amp,e_noise,plotDat)
+function [p, p_ttest, mn_diff, sem_diff, mn_ss1, sem_ss1, mn_ss2, sem_ss2, mn_CTF_SS1, mn_CTF_SS2] = simulateSample(nSubs,SS1_amp,SS2_amp,e_noise,plotDat)
 
 % inputs:
 % nSubs = number of "subjects" in sample
@@ -17,15 +17,15 @@ parfor s = 1:nSubs
 end
 
 %% plot data
+mn_CTF_SS1 = mean(SS1_CTF); mn_CTF_SS1(9) = mn_CTF_SS1(1);
+sem_CTF_SS1 = std(SS1_CTF)./sqrt(nSubs); sem_CTF_SS1(9) = sem_CTF_SS1(1);
+mn_CTF_SS2 = mean(SS2_CTF); mn_CTF_SS2(9) = mn_CTF_SS2(1);
+sem_CTF_SS2 = std(SS2_CTF)./sqrt(nSubs); sem_CTF_SS2(9) = sem_CTF_SS2(1);
+x = -180:45:180; % values for x-axis
 if plotDat == 1
-    SS1_mn = mean(SS1_CTF); SS1_mn(9) = SS1_mn(1);
-    SS1_sem = std(SS1_CTF)./sqrt(nSubs); SS1_sem(9) = SS1_sem(1);
-    SS2_mn = mean(SS2_CTF); SS2_mn(9) = SS2_mn(1);
-    SS2_sem = std(SS2_CTF)./sqrt(nSubs); SS2_sem(9) = SS2_sem(1);
-    x = -180:45:180; % values for x-axis
     figure;
-    errorbar(x,SS1_mn,SS1_sem,'b','LineWidth',1.5); hold on;
-    errorbar(x,SS2_mn,SS2_sem,'r','LineWidth',1.5);
+    errorbar(x,mn_CTF_SS1,sem_CTF_SS1,'b','LineWidth',1.5); hold on;
+    errorbar(x,mn_CTF_SS2,sem_CTF_SS2,'r','LineWidth',1.5);
     xlabel('Channel Offset (°)')
     ylabel('Channel Response');
     xticks(-180:90:180)
@@ -33,9 +33,9 @@ if plotDat == 1
 end
 
 %% calculate mean slope values
-mn_SS1 = mean(SS1_sl); 
-mn_SS2 = mean(SS2_sl); 
-mn_diff = mn_SS1-mn_SS2; % difference of means
+mn_ss1 = mean(SS1_sl); 
+mn_ss2 = mean(SS2_sl); 
+mn_diff = mn_ss1-mn_ss2; % difference of means
 
 
 %% do bootstrap resampling test
@@ -53,6 +53,9 @@ for b = 1:bIter
 end
 
 diff = ss1_mn_sl-ss2_mn_sl;  % difference of means for each bootstrap sample
+sem_diff = std(diff); 
+sem_ss1 = std(ss1_mn_sl);
+sem_ss2 = std(ss2_mn_sl); 
 p1 = length(diff(diff < 0))/length(diff); % left tail
 p2 = length(diff(diff > 0))/length(diff); % right tail
 
@@ -64,3 +67,8 @@ elseif p2 < p1
 elseif p1 == p2
     p = p1;
 end
+
+% do regular t-test
+[h p_ttest] = ttest(SS1_sl,SS2_sl); 
+
+
