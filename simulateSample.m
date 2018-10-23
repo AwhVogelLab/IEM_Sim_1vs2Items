@@ -1,4 +1,4 @@
-function [p, p_ttest, mn_diff, sem_diff, mn_ss1, sem_ss1, mn_ss2, sem_ss2, mn_CTF_SS1, mn_CTF_SS2] = simulateSample(nSubs,SS1_amp,SS2_amp,e_noise,plotDat)
+function [p, p_ttest, mn_diff, sem_diff, mn_ss1, sem_ss1, mn_ss2, sem_ss2, mn_CTF_SS1, mn_CTF_SS2] = simulateSample(nSubs,SS1_amp,SS2_amp,e_noise,dat_tuningwidth,plotDat)
 
 % inputs:
 % nSubs = number of "subjects" in sample
@@ -13,7 +13,7 @@ SS1_sl = nan(nSubs,1); SS2_sl = SS1_sl;
 
 %% simulate data for each sub and apply IEM analysis
 parfor s = 1:nSubs
-    [SS1_CTF(s,:) SS2_CTF(s,:) SS1_sl(s) SS2_sl(s)] = sim_1vs2Items(e_noise,SS1_amp,SS2_amp);
+    [SS1_CTF(s,:) SS2_CTF(s,:) SS1_sl(s) SS2_sl(s)] = sim_1vs2Items(e_noise,SS1_amp,SS2_amp,dat_tuningwidth);
 end
 
 %% plot data

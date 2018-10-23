@@ -1,4 +1,4 @@
-function [d_n,posBin1,posBin2] = simulateDat(ss,nTrials,amp,e_noise,w)
+function [d_n,posBin1,posBin2] = simulateDat(ss,nTrials,amp,e_noise,dat_tuningwidth,w)
 %
 % Inputs:
 % ss = number of representations (1 or 2) that vary independently
@@ -23,7 +23,7 @@ end
 % specify basis set for generated predicted channel responses
 nBins = 360;
 nChans = 8;
-em.sinPower = 25;
+em.sinPower = dat_tuningwidth;
 em.x = linspace(0, 2*pi-2*pi/nBins, nBins);
 em.cCenters = linspace(0, 2*pi-2*pi/nChans, nChans);
 em.cCenters = rad2deg(em.cCenters);

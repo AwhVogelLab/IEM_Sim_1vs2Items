@@ -1,14 +1,13 @@
+function runSimulation(nSamps,ss1_amp,ss2_amp,e_noise,dat_tuningwidth)
 
 % seed the random generator
 rng default % sets the generator to twister and sets the seed to 0 (as in matlab restarted)
 rng shuffle % generates a new seed based on the clock
 sim.rngSettings = rng; % save to p-struct
 
-nSamps = 10000; % number of times to run the simulation
-nSubsPerSamp = 28; 
-ss1_amp = 1;
-ss2_amp = 0.8;
-e_noise = 1;
+nSubsPerSamp = 28; % to match our sample
+
+fname = ['Sim1vs2_',num2str(nSamps),'Samps_SS1amp',num2str(ss1_amp),'_SS2amp',num2str(ss2_amp),'_Noise',num2str(e_noise),'_DatTuning',num2str(dat_tuningwidth),'.mat'];
 
 pval = nan(nSamps,1);
 pval_ttest = nan(nSamps,1); 
@@ -24,7 +23,7 @@ mn_ctf_ss2 = nan(nSamps,9);
 for s = 1:nSamps
     fprintf('Sample = %d\n',s);
     tic
-    [pval(s) pval_ttest(s) mn_diff(s) sem_diff(s) mn_ss1(s) sem_ss1(s) mn_ss2(s) sem_ss2(s) mn_ctf_ss1(s,:) mn_ctf_ss2(s,:)] = simulateSample(nSubsPerSamp,ss1_amp,ss2_amp,e_noise,0);
+    [pval(s) pval_ttest(s) mn_diff(s) sem_diff(s) mn_ss1(s) sem_ss1(s) mn_ss2(s) sem_ss2(s) mn_ctf_ss1(s,:) mn_ctf_ss2(s,:)] = simulateSample(nSubsPerSamp,ss1_amp,ss2_amp,e_noise,dat_tuningwidth,0);
     toc 
 end
 
@@ -33,6 +32,7 @@ sim.nSubsPerSamp = nSubsPerSamp;
 sim.ss1_amp = ss1_amp;
 sim.ss2_amp = ss2_amp;
 sim.e_noise = e_noise;
+sim.dat_tuningwidth = dat_tuningwidth; 
 sim.pval = pval;
 sim.pval_ttest = pval_ttest; 
 sim.mn_diff = mn_diff;
@@ -43,9 +43,4 @@ sim.mn_ss2 = mn_ss2;
 sim.sem_ss2 = sem_ss2; 
 sim.mn_ctf_ss1 = mn_ctf_ss1;
 sim.mn_ctf_ss2 = mn_ctf_ss2;
-save('Sim.mat','sim')
-
-
-
-
-
+save(fname,'sim')
