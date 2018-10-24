@@ -15,9 +15,19 @@ xlabel('Sample');
 ylabel('Diff in Selectivity'); 
 ylim([-.05 .05])
 
-
 mean_of_mean_diffs = mean(sim.mn_diff)
 
-sigSamps = length(sim.pval(sim.pval_ttest < .05))/length(sim.pval)
-sigSamps = length(sim.pval(sim.pval_ttest < .05 & sim.mn_diff < 0))/length(sim.pval)
-sigSamps = length(sim.pval(sim.pval_ttest < .05 & sim.mn_diff > 0))/length(sim.pval)
+% print statistics
+alpha = 0.05;
+% bootstrap - proportion significant
+sigSamps = length(sim.pval(sim.pval < alpha))/length(sim.pval); 
+% bootstrap - proportion significant and SS1 > SS2
+sigSamps = length(sim.pval(sim.pval < alpha & sim.mn_diff < 0))/length(sim.pval)
+% bootstrap - proportion significant and SS2 > SS1
+sigSamps = length(sim.pval(sim.pval < alpha & sim.mn_diff > 0))/length(sim.pval)
+% reg t-test - proportion significant
+sigSamps = length(sim.pval(sim.pval_ttest < alpha))/length(sim.pval)
+% reg t-test - proportion significant and SS1 > SS2
+sigSamps = length(sim.pval(sim.pval_ttest < alpha & sim.mn_diff < 0))/length(sim.pval)
+% reg t-test - proportion significant and SS2 > SS1
+sigSamps = length(sim.pval(sim.pval_ttest < alpha & sim.mn_diff > 0))/length(sim.pval)
