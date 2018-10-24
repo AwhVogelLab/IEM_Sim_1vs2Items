@@ -18,6 +18,6 @@ ylim([-.05 .05])
 
 mean_of_mean_diffs = mean(sim.mn_diff)
 
-sigSamps = length(sim.pval(sim.pval < .05))/length(sim.pval)
-sigSamps = length(sim.pval(sim.pval < .05 & sim.mn_diff < 0))/length(sim.pval)
-sigSamps = length(sim.pval(sim.pval < .05 & sim.mn_diff > 0))/length(sim.pval)
+sigSamps = length(sim.pval(sim.pval_ttest < .05))/length(sim.pval)
+sigSamps = length(sim.pval(sim.pval_ttest < .05 & sim.mn_diff < 0))/length(sim.pval)
+sigSamps = length(sim.pval(sim.pval_ttest < .05 & sim.mn_diff > 0))/length(sim.pval)
