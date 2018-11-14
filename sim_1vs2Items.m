@@ -46,7 +46,7 @@ sl_SS2 = nan(nIters,nBlocks);
 
 for iter = 1:nIters
     
-    [blocks nTrialsPerBlock, nTrialsPerBlock_C1, nTrialsPerBlock_C2] = makeBlockAssignment_CommonTrain(nBlocks,8,posBin,SS1_Idx,SS2_Idx);
+    [blocks nTrialsPerBlock, nTrialsPerBlock_C1, nTrialsPerBlock_C2] = makeBlockAssignment_CommonTrain(nBlocks,nBins,posBin,SS1_Idx,SS2_Idx);
     
     blockDat = nan(nBins*nBlocks,nElectrodes);
     blockDat_SS1 = nan(nBins*nBlocks,nElectrodes);

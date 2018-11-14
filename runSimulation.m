@@ -20,7 +20,7 @@ sem_ss2 = nan(nSamps,1);
 mn_ctf_ss1 = nan(nSamps,9);
 mn_ctf_ss2 = nan(nSamps,9); 
 
-for s = 1:nSamps
+parfor s = 1:nSamps
     fprintf('Sample = %d\n',s);
     tic
     [pval(s) pval_ttest(s) mn_diff(s) sem_diff(s) mn_ss1(s) sem_ss1(s) mn_ss2(s) sem_ss2(s) mn_ctf_ss1(s,:) mn_ctf_ss2(s,:)] = simulateSample(nSubsPerSamp,ss1_amp,ss2_amp,e_noise,dat_tuningwidth,0);

@@ -28,9 +28,9 @@ em.x = linspace(0, 2*pi-2*pi/nBins, nBins);
 em.cCenters = linspace(0, 2*pi-2*pi/nChans, nChans);
 em.cCenters = rad2deg(em.cCenters);
 pred = sin(0.5*em.x).^em.sinPower; % hypothetical channel responses
-pred = wshift('1D',pred,5); % shift the initial basis function
+pred = wshift('1D',pred,180); % shift the initial basis function
 basisSet = nan(nChans,nBins);
-for c = 1:nChans;
+for c = 1:nChans
     basisSet(c,:) = wshift('1D',pred,-em.cCenters(c)); % generate circularly shifted basis functions
 end
 basisSet = basisSet';

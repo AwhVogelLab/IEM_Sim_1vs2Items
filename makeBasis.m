@@ -7,7 +7,6 @@ nBins = 8;
 cCenters = linspace(0, 2*pi-2*pi/nChans, nChans);
 
 % Specify basis set
-em.sinPower = 7;
 em.x = linspace(0, 2*pi-2*pi/nBins, nBins);
 em.cCenters = linspace(0, 2*pi-2*pi/nChans, nChans);
 em.cCenters = rad2deg(cCenters);
