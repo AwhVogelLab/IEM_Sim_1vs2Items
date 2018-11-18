@@ -45,22 +45,41 @@ randInd = randperm(nTrials);
 posBin1 = tStructure(1,randInd);
 posBin2 = tStructure(2,randInd);
 
-
 % specify stimulus location (as we do in our experiments)
+minDist = 5.7296; % minimum distance between items (in degrees of angular position) - corresponds to min separation of 1 item (i.e., 0.2 degrees)
+
 for t = 1:nTrials
-    tmpBinBounds = p.posBinBounds(posBin1(t),:);
-    tmpPos = randsample(tmpBinBounds(1):tmpBinBounds(2),1);
-    if tmpPos < 0
-        tmpPos = tmpPos +360; % possible values = 0-359 degrees
+    diff = 1;
+    while diff < minDist;
+        
+        tmpBinBounds = p.posBinBounds(posBin1(t),:);
+        tmpPos = randsample(tmpBinBounds(1):tmpBinBounds(2),1);
+        if tmpPos < 0
+            tmpPos = tmpPos +360; % possible values = 0-359 degrees
+        end
+        pos1(1,t) = tmpPos;
+        
+        tmpBinBounds = p.posBinBounds(posBin2(t),:);
+        tmpPos = randsample(tmpBinBounds(1):tmpBinBounds(2),1);
+        if tmpPos < 0
+            tmpPos = tmpPos +360; % possible values = 0-359 degrees
+        end
+        pos2(1,t) = tmpPos;
+
+        % calculate the angular difference in position
+        if pos1(1,t) > pos2(1,t)
+            diff = pos1(1,t) - pos2(1,t);
+        else
+            diff = pos2(1,t) - pos1(1,t);
+        end
+        
+        % correct diff if the "long way around" was calculated.
+        if diff > 180
+            diff = 360 - diff;
+        end
+        % save the angular difference in position
+        diffVect(t) = diff;
     end
-    pos1(1,t) = tmpPos;
-    
-    tmpBinBounds = p.posBinBounds(posBin2(t),:);
-    tmpPos = randsample(tmpBinBounds(1):tmpBinBounds(2),1);
-    if tmpPos < 0
-        tmpPos = tmpPos +360; % possible values = 0-359 degrees
-    end
-    pos2(1,t) = tmpPos; 
 end
 
 % calculate predicted channel responses for each trial
