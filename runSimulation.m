@@ -9,8 +9,8 @@ nSubsPerSamp = 28; % to match our sample
 
 fname = ['Sim1vs2_',num2str(nSamps),'Samps_SS1amp',num2str(ss1_amp),'_SS2amp',num2str(ss2_amp),'_Noise',num2str(e_noise),'_DatTuning',num2str(dat_tuningwidth),'.mat'];
 
-pval = nan(nSamps,1);
-pval_ttest = nan(nSamps,1); 
+pval = nan(nSamps,1); 
+tstat = nan(nSamps,1); 
 mn_diff = nan(nSamps,1); 
 sem_diff = nan(nSamps,1); 
 mn_ss1 = nan(nSamps,1);
@@ -20,10 +20,10 @@ sem_ss2 = nan(nSamps,1);
 mn_ctf_ss1 = nan(nSamps,9);
 mn_ctf_ss2 = nan(nSamps,9); 
 
-parfor s = 1:nSamps
+for s = 1:nSamps
     fprintf('Sample = %d\n',s);
     tic
-    [pval(s) pval_ttest(s) mn_diff(s) sem_diff(s) mn_ss1(s) sem_ss1(s) mn_ss2(s) sem_ss2(s) mn_ctf_ss1(s,:) mn_ctf_ss2(s,:)] = simulateSample(nSubsPerSamp,ss1_amp,ss2_amp,e_noise,dat_tuningwidth,0);
+    [pval(s) tstat(s) mn_diff(s) sem_diff(s) mn_ss1(s) sem_ss1(s) mn_ss2(s) sem_ss2(s) mn_ctf_ss1(s,:) mn_ctf_ss2(s,:)] = simulateSample(nSubsPerSamp,ss1_amp,ss2_amp,e_noise,dat_tuningwidth,0);
     toc 
 end
 
@@ -34,7 +34,7 @@ sim.ss2_amp = ss2_amp;
 sim.e_noise = e_noise;
 sim.dat_tuningwidth = dat_tuningwidth; 
 sim.pval = pval;
-sim.pval_ttest = pval_ttest; 
+sim.tstat = tstat; 
 sim.mn_diff = mn_diff;
 sim.sem_diff = sem_diff;
 sim.mn_ss1 = mn_ss1;

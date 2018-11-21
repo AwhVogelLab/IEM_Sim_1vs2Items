@@ -1,33 +1,36 @@
+fs = 8;
+nShow= 50; % how many samples to plot
 
-figure;
+FigHandle = figure('Position', [100, 100, 450, 400]); % size of the plot
 subplot(2,1,1); 
-errorbar(sim.mn_ss1,sim.sem_ss1,'b'); hold on;
-errorbar(sim.mn_ss2,sim.sem_ss2,'r'); 
-ylim([0.14 0.22])
+shadedErrorBar(1:nShow,sim.mn_ss1(1:nShow),sim.sem_ss1(1:nShow),'b'); hold on;
+% plot(1:nShow,sim.mn_ss1(1:nShow),'b','LineWidth',1.5)
+shadedErrorBar(1:nShow,sim.mn_ss2(1:nShow),sim.sem_ss2(1:nShow),'r');
+% plot(1:nShow,sim.mn_ss2(1:nShow),'r','LineWidth',1.5)
 xlabel('Sample');
-ylabel('Mean CTF Selectivity'); 
+ylabel('CTF Selectivity'); 
+set(gca,'FontSize',fs)
+set(gca,'FontName','Arial')
+ylim([0.14 0.22])
 
 subplot(2,1,2); 
-errorbar(sim.mn_diff,sim.sem_diff); 
+shadedErrorBar(1:nShow,sim.mn_diff(1:nShow),sim.sem_diff(1:nShow)); 
+% plot(1:nShow,sim.mn_diff(1:nShow),'k','LineWidth',1.5)
 hold on;
-plot(0:sim.nSamps,zeros(sim.nSamps+1,1),'--k');
+plot(1:nShow,zeros(nShow,1),'--k');
 xlabel('Sample');
-ylabel('Diff in Selectivity'); 
-ylim([-.05 .05])
+ylabel('Diff in CTF Selectivity'); 
+set(gca,'FontSize',fs)
+set(gca,'FontName','Arial')
+ylim([-.06 .06])
 
 mean_of_mean_diffs = mean(sim.mn_diff)
 
 % print statistics
 alpha = 0.05;
-% bootstrap - proportion significant
-sigSamps = length(sim.pval(sim.pval < alpha))/length(sim.pval); 
-% bootstrap - proportion significant and SS1 > SS2
-sigSamps = length(sim.pval(sim.pval < alpha & sim.mn_diff < 0))/length(sim.pval)
-% bootstrap - proportion significant and SS2 > SS1
-sigSamps = length(sim.pval(sim.pval < alpha & sim.mn_diff > 0))/length(sim.pval)
 % reg t-test - proportion significant
-sigSamps = length(sim.pval(sim.pval_ttest < alpha))/length(sim.pval)
+sigSamps = length(sim.pval(sim.pval < alpha))/length(sim.pval)
 % reg t-test - proportion significant and SS1 > SS2
-sigSamps = length(sim.pval(sim.pval_ttest < alpha & sim.mn_diff < 0))/length(sim.pval)
+sigSamps = length(sim.pval(sim.pval < alpha & sim.mn_diff < 0))/length(sim.pval)
 % reg t-test - proportion significant and SS2 > SS1
-sigSamps = length(sim.pval(sim.pval_ttest < alpha & sim.mn_diff > 0))/length(sim.pval)
+sigSamps = length(sim.pval(sim.pval < alpha & sim.mn_diff > 0))/length(sim.pval)

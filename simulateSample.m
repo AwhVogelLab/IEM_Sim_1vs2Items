@@ -1,4 +1,4 @@
-function [p, p_ttest, mn_diff, sem_diff, mn_ss1, sem_ss1, mn_ss2, sem_ss2, mn_CTF_SS1, mn_CTF_SS2] = simulateSample(nSubs,SS1_amp,SS2_amp,e_noise,dat_tuningwidth,plotDat)
+function [p, tstat, mn_diff, sem_diff, mn_ss1, sem_ss1, mn_ss2, sem_ss2, mn_CTF_SS1, mn_CTF_SS2] = simulateSample(nSubs,SS1_amp,SS2_amp,e_noise,dat_tuningwidth,plotDat)
 
 % inputs:
 % nSubs = number of "subjects" in sample
@@ -33,42 +33,16 @@ if plotDat == 1
 end
 
 %% calculate mean slope values
+diff_sl = SS1_sl-SS2_sl; % calculate SS1-SS2 difference
 mn_ss1 = mean(SS1_sl); 
 mn_ss2 = mean(SS2_sl); 
-mn_diff = mn_ss1-mn_ss2; % difference of means
-
-
-%% do bootstrap resampling test
-
-bIter = 100000; % do 100,000 bootstrap samples (as in our analyses)
-
-ss1_mn_sl = nan(bIter,1);
-ss2_mn_sl = nan(bIter,1); 
-
-for b = 1:bIter
-    [sl, idx] = datasample(SS1_sl,nSubs,1);    
-    ss1_mn_sl(b) = mean(sl);
-    sl = SS2_sl(idx,:); 
-    ss2_mn_sl(b) = mean(sl);  
-end
-
-diff = ss1_mn_sl-ss2_mn_sl;  % difference of means for each bootstrap sample
-sem_diff = std(diff); 
-sem_ss1 = std(ss1_mn_sl);
-sem_ss2 = std(ss2_mn_sl); 
-p1 = length(diff(diff < 0))/length(diff); % left tail
-p2 = length(diff(diff > 0))/length(diff); % right tail
-
-% multiple the smaller p-value by 2 to get the two-sided value
-if p1 < p2
-    p = 2*p1;
-elseif p2 < p1
-    p = 2*p2;
-elseif p1 == p2
-    p = p1;
-end
+mn_diff = mean(diff_sl); 
+sem_ss1 = std(SS1_sl)./sqrt(nSubs); 
+sem_ss2 = std(SS2_sl)./sqrt(nSubs); 
+sem_diff = std(diff_sl)./sqrt(nSubs); 
 
 % do regular t-test
-[h p_ttest] = ttest(SS1_sl,SS2_sl); 
+[h p ci stats] = ttest(SS1_sl,SS2_sl); 
+tstat = stats.tstat; 
 
 
