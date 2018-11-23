@@ -1,5 +1,5 @@
 fs = 8;
-nShow= 50; % how many samples to plot
+nShow= 100; % how many samples to plot
 
 FigHandle = figure('Position', [100, 100, 450, 400]); % size of the plot
 subplot(2,1,1); 
@@ -19,10 +19,12 @@ shadedErrorBar(1:nShow,sim.mn_diff(1:nShow),sim.sem_diff(1:nShow));
 hold on;
 plot(1:nShow,zeros(nShow,1),'--k');
 xlabel('Sample');
-ylabel('Diff in CTF Selectivity'); 
+ylabel({'Difference in CTF Selectivity','(one item - two item)'}); 
 set(gca,'FontSize',fs)
 set(gca,'FontName','Arial')
 ylim([-.06 .06])
+yticks([-.06 -.03 0 .03 .06])
+
 
 mean_of_mean_diffs = mean(sim.mn_diff)
 
