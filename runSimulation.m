@@ -1,5 +1,13 @@
 function runSimulation(nSamps,ss1_amp,ss2_amp,e_noise,dat_tuningwidth)
 
+% inputs:
+% nSamps: number of samples to run (we do 10,000 but this will take a few hours)
+% ss1_amp: amplitude of the underlying tuning functions in the one-item cond (use 1 by default)
+% ss2_amp: amplitude of the underlying tuning functions in the two-item cond
+% e_noise: sd of gaussian noise applied to each "electrode"
+% dat_tuningwidth: sin power that specifies tuning width of simulated data
+% (good default is 25, which matches the basis function of our encoding model analysis)
+
 % seed the random generator
 rng default % sets the generator to twister and sets the seed to 0 (as in matlab restarted)
 rng shuffle % generates a new seed based on the clock
