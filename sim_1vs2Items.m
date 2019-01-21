@@ -1,11 +1,12 @@
-function [SS1_TF SS2_TF sl_SS1 sl_SS2] = sim_1vs2Items(e_noise,SS1_amp,SS2_amp,dat_tuningwidth)
+function [SS1_TF SS2_TF sl_SS1 sl_SS2] = sim_1vs2Items(SS1_amp,SS2_amp,SS1_noise,SS2_noise,dat_tuningwidth)
 % calls function to generate synthetic data, runs encoding model on the
 % synthetic data
 %
 % Inputs:
-% e_noise = electrode noise (use 0 by default)
 % SS1_amp = amplitude of underlying tuning for SS1 (Set Size 1)
 % SS2_amp = amplitude of underlying tuning for SS2
+% SS1_noise = gaussian noise for SS1
+% SS2_noise = gaussian noise for SS2
 
 % nTrials
 
@@ -19,9 +20,9 @@ nChans = 8;
 w = rand(nChans,nElectrodes); 
 
 % simulate SS1 data
-[SS1_dat,SS1_pos1,SS1_pos2] = simulateDat(1,nTrials,SS1_amp,e_noise,dat_tuningwidth,w);
+[SS1_dat,SS1_pos1,SS1_pos2] = simulateDat(1,nTrials,SS1_amp,SS1_noise,dat_tuningwidth,w);
 % simulate SS2 data
-[SS2_dat,SS2_pos1,SS2_pos2] = simulateDat(2,nTrials,SS2_amp,e_noise,dat_tuningwidth,w);
+[SS2_dat,SS2_pos1,SS2_pos2] = simulateDat(2,nTrials,SS2_amp,SS2_noise,dat_tuningwidth,w);
 
 % concatenate data
 dat = [SS1_dat; SS2_dat]; % complete data set

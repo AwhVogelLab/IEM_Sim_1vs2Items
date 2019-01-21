@@ -1,10 +1,11 @@
-function [p, tstat, mn_diff, sem_diff, mn_ss1, sem_ss1, mn_ss2, sem_ss2, mn_CTF_SS1, mn_CTF_SS2] = simulateSample(nSubs,SS1_amp,SS2_amp,e_noise,dat_tuningwidth,plotDat)
+function [p, tstat, mn_diff, sem_diff, mn_ss1, sem_ss1, mn_ss2, sem_ss2, mn_CTF_SS1, mn_CTF_SS2] = simulateSample(nSubs,SS1_amp,SS2_amp,SS1_noise,SS2_noise,dat_tuningwidth,plotDat)
 
 % inputs:
 % nSubs = number of "subjects" in sample
 % SS1_amp = amplitude of simulated tuning in SS1 condition
 % SS2_amp = amp of simulated tuning in SS2 conditon
-% e_noise = electrode noise
+% SS1_noise = gaussian noise for SS1 condition
+% SS2_noise = gaussian noise for SS2 condition
 % plotDat: 0 = plot the data, 1 = don't plot the data
 
 % preallocate matrices
@@ -13,7 +14,7 @@ SS1_sl = nan(nSubs,1); SS2_sl = SS1_sl;
 
 %% simulate data for each sub and apply IEM analysis
 parfor s = 1:nSubs
-    [SS1_CTF(s,:) SS2_CTF(s,:) SS1_sl(s) SS2_sl(s)] = sim_1vs2Items(e_noise,SS1_amp,SS2_amp,dat_tuningwidth);
+    [SS1_CTF(s,:) SS2_CTF(s,:) SS1_sl(s) SS2_sl(s)] = sim_1vs2Items(SS1_amp,SS2_amp,SS1_noise,SS2_noise,dat_tuningwidth);
 end
 
 %% plot data
