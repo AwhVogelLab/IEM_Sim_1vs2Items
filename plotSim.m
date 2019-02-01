@@ -1,38 +1,50 @@
-fs = 8;
-nShow= 100; % how many samples to plot
+%% plot simulation results
+% first load simulation data file, then run this script to plot. 
 
-FigHandle = figure('Position', [100, 100, 450, 400]); % size of the plot
-subplot(2,1,1); 
-shadedErrorBar(1:nShow,sim.mn_ss1(1:nShow),sim.sem_ss1(1:nShow),'b'); hold on;
-% plot(1:nShow,sim.mn_ss1(1:nShow),'b','LineWidth',1.5)
-shadedErrorBar(1:nShow,sim.mn_ss2(1:nShow),sim.sem_ss2(1:nShow),'r');
-% plot(1:nShow,sim.mn_ss2(1:nShow),'r','LineWidth',1.5)
-xlabel('Sample');
-ylabel('CTF Selectivity'); 
+FigHandle = figure('Position', [100, 100, 700, 180]); % size of the plot
+
+% plot settings
+fs = 8; % font size
+binwidth = 0.0004; % bin width for histograms
+facealpha = 0.5; % transparency
+
+%% plot mean CTF selectivity for each condition
+ymax = 1500; 
+edges = [0.14:binwidth:0.20]; % hist bin edges
+subplot(1,2,1);
+histogram(sim.mn_ss2,edges,'EdgeColor','none','FaceColor','r','FaceAlpha',facealpha); hold on;
+histogram(sim.mn_ss1,edges,'EdgeColor','none','FaceColor','b','FaceAlpha',facealpha); 
+xlabel('CTF Selectivity')
+ylabel('# Samples')
+ylim([0 ymax])
 set(gca,'FontSize',fs)
 set(gca,'FontName','Arial')
-ylim([0.14 0.22])
+x = [mean(sim.mn_ss2) mean(sim.mn_ss2)];
+y = [0 ymax]
+plot(x,y,'r','LineStyle','--'); % plot mean marker SS2
+x = [mean(sim.mn_ss1) mean(sim.mn_ss1)];
+plot(x,y,'b','LineStyle','--'); % plot mean marker SS1
 
-subplot(2,1,2); 
-shadedErrorBar(1:nShow,sim.mn_diff(1:nShow),sim.sem_diff(1:nShow)); 
-% plot(1:nShow,sim.mn_diff(1:nShow),'k','LineWidth',1.5)
-hold on;
-plot(1:nShow,zeros(nShow,1),'--k');
-xlabel('Sample');
-ylabel({'Difference in CTF Selectivity','(one item - two item)'}); 
+%% plot mean difference in CTF selectivity (SS1 - SS2)
+ymax = 1000;
+edges = [-.03:binwidth:0.03]
+subplot(1,2,2)
+histogram(sim.mn_diff,edges,'EdgeColor','none','FaceColor','k'); hold on;
+xlabel('Difference in CTF Selectivity')
+ylabel('# Samples')
+ylim([0 ymax])
 set(gca,'FontSize',fs)
 set(gca,'FontName','Arial')
-ylim([-.06 .06])
-yticks([-.06 -.03 0 .03 .06])
-
-
-mean_of_mean_diffs = mean(sim.mn_diff)
+mean_of_mean_diffs = mean(sim.mn_diff);
+x = [mean_of_mean_diffs mean_of_mean_diffs];
+y = [0 ymax]
+plot(x,y,'k','LineStyle','--'); % plot mean marker
 
 % print statistics
 alpha = 0.05;
 % reg t-test - proportion significant
 sigSamps = length(sim.pval(sim.pval < alpha))/length(sim.pval)
 % reg t-test - proportion significant and SS1 > SS2
-sigSamps = length(sim.pval(sim.pval < alpha & sim.mn_diff < 0))/length(sim.pval)
-% reg t-test - proportion significant and SS2 > SS1
 sigSamps = length(sim.pval(sim.pval < alpha & sim.mn_diff > 0))/length(sim.pval)
+% reg t-test - proportion significant and SS2 > SS1
+sigSamps = length(sim.pval(sim.pval < alpha & sim.mn_diff < 0))/length(sim.pval)
