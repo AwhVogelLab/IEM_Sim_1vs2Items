@@ -18,4 +18,4 @@ cd $PBS_O_WORKDIR
 mkdir -p ~/matlabtmp/$PBS_JOBID
 export MATLABWORKDIR=~/matlabtmp/$PBS_JOBID
 
-matlab -nodesktop -nosplash -r "ClusterWrapper(12,10000,1,0.8,1,13)" >> LogFile.log 
+matlab -nodesktop -nosplash -r "ClusterWrapper(12,10000,1,1,1,1,25)" >> LogFile.log 
